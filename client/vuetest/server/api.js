@@ -15,13 +15,13 @@ conn.connect();
 const jsonWrite = (res, ret) => {
   if (typeof ret === 'undefined') {
     res.json({
-      code: 1,
+      code: 0,
       msg: 'fail',
       data: ''
     })
   } else {
     res.json({
-      code: 0,
+      code: 1,
       msg: 'success',
       data: ret
     })

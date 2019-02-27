@@ -21,21 +21,20 @@ export default {
   },
   methods: {
     submit() {
-      console.log(this.loginData);
       const url = "/api/login";
       const _this = this;
-      this.$http.post(url, _this.form, {}).then(
-        function(data) {
-          console.log("请求成攻！ ", data.body);
-          let content = data.body;
-          if (content.length != 0) {
-            alert("登录成功！");
+      this.$http.post(url, _this.form).then(
+        res => {
+          res = res.body;
+          if (res.code) {
+            let a = res.data.tip ? res.data.tip : "登陆成功";
+            alert(a);
           } else {
-            alert("账户密码错误！");
+            alert(res.msg);
           }
         },
-        function(response) {
-          console.log(response);
+        res => {
+          console.log(res);
         }
       );
     }
