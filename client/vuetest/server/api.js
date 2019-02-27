@@ -10,14 +10,21 @@ const conn = mysql.createConnection(models.mysql);
 
 conn.connect();
 
+
+//统一返回json格式
 const jsonWrite = (res, ret) => {
   if (typeof ret === 'undefined') {
     res.json({
       code: 1,
-      msg: '操作失败'
+      msg: 'fail',
+      data: ''
     })
   } else {
-    res.json(ret)
+    res.json({
+      code: 0,
+      msg: 'success',
+      data: ret
+    })
   }
 }
 
@@ -28,23 +35,28 @@ router.post('/login', (req, res) => {
 
   console.log('sql', sql);
   console.log('params', params);
-
-  conn.query(sql, [params.phone], (err, result) => {
-    if (err) {
-      console.log(err)
-    }
-    if (result) {
-      jsonWrite(res, result);
-      for (let i = 0; i < result.length; i++) {
-        console.log('请求回来', result[i]);
-        console.log('请求结果', typeof result[i], result[i].realname);
-        if (result[i].realname == params.realname) {
-          res.send('返回回来了')
-        }
+  if (params.realname && params.phone) {
+    conn.query(sql, [params.phone], (err, result) => {
+      if (err) {
+        console.log(err)
       }
-      res.end('is over')
-    }
-  })
-
+      if (result) {
+        console.log('-------------接口--------------------');
+        if (result[0].realname == params.realname) {
+          jsonWrite(res, result[0]);
+        } else {
+          jsonWrite(res, {
+            tip: '密码错误'
+          });
+        }
+        console.log(result)
+        res.end();
+      }
+    })
+  } else {
+    jsonWrite(res, {
+      tip: '请输入内容'
+    });
+  }
 })
 module.exports = router;

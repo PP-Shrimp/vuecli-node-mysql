@@ -2,7 +2,7 @@
 var sqlMap = {
   // 用户
   user: {
-    login: 'SELECT realname FROM member WHERE phone = ?;',
+    login: 'SELECT realname,phone FROM member WHERE phone = ?;',
     // add: 'insert into admin(username, userpsw) values ( ?, ?);'
   }
 }
