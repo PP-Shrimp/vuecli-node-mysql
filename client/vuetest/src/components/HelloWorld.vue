@@ -4,6 +4,8 @@
     <el-input v-model="form.realname" placeholder="请输入realname"></el-input>
     <el-input v-model="form.phone" placeholder="请输入phone"></el-input>
     <el-button type="primary" @click="submit">提交</el-button>
+    <el-input v-model="form2.phone" placeholder="请输入phone"></el-input>
+    <el-button type="primary" @click="submit2">提交</el-button>
   </div>
 </template>
 
@@ -16,6 +18,9 @@ export default {
       form: {
         realname: "",
         phone: ""
+      },
+      form2: {
+        phone: ""
       }
     };
   },
@@ -23,7 +28,7 @@ export default {
     submit() {
       const url = "/api/login";
       const _this = this;
-      this.$http.post(url, _this.form).then(
+      _this.$http.post(url, _this.form).then(
         res => {
           res = res.body;
           if (res.code) {
@@ -33,8 +38,26 @@ export default {
             alert(res.msg);
           }
         },
+        err => {
+          console.log(err);
+        }
+      );
+    },
+    submit2() {
+      const url = "/api/query";
+      const _this = this;
+      _this.$http.get(url, _this.form2).then(
         res => {
-          console.log(res);
+          res = res.body;
+          if (res.code) {
+            let a = res.data.tip ? res.data.tip : "登陆成功";
+            alert(a);
+          } else {
+            alert(res.msg);
+          }
+        },
+        err => {
+          console.log(err);
         }
       );
     }
